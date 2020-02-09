@@ -268,7 +268,10 @@ class Client extends Base {
       self.lastResponse = body;
       self.lastResponseHeaders = response && response.headers;
       self.lastElapsedTime = response && response.elapsedTime;
-      self.emit('response', body, response);
+      // allow a way to modify the immutable body string in the listener
+      var editableBody = { body };
+      self.emit('response', body, response, editableBody);
+      body = editableBody.body;
 
       debug('client response. response: %j body: %j', response, body);
 
